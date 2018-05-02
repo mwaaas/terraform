@@ -112,6 +112,7 @@ website-test:
 ifeq (,$(wildcard $(GOPATH)/src/$(WEBSITE_REPO)))
 	echo "$(WEBSITE_REPO) not found in your GOPATH (necessary for layouts and assets), get-ting..."
 	git clone https://$(WEBSITE_REPO) $(GOPATH)/src/$(WEBSITE_REPO)
+	git -C $(GOPATH)/src/$(WEBSITE_REPO) checkout f-link-checker-reject
 endif
 	$(eval WEBSITE_PATH := $(GOPATH)/src/$(WEBSITE_REPO))
 	@echo "==> Testing core website in Docker..."
