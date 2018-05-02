@@ -3,6 +3,8 @@ package configs
 import (
 	"fmt"
 
+	"github.com/hashicorp/terraform/addrs"
+
 	"github.com/hashicorp/hcl2/hcl"
 )
 
@@ -97,6 +99,20 @@ func NewModule(primaryFiles, overrideFiles []*File) (*Module, hcl.Diagnostics) {
 	}
 
 	return mod, diags
+}
+
+// ResourceByAddr returns the configuration for the resource with the given
+// address, or nil if there is no such resource.
+func (m *Module) ResourceByAddr(addr addrs.Resource) *Resource {
+	key := addr.String()
+	switch addr.Mode {
+	case addrs.ManagedResourceMode:
+		return m.ManagedResources[key]
+	case addrs.DataResourceMode:
+		return m.DataResources[key]
+	default:
+		return nil
+	}
 }
 
 func (m *Module) appendFile(file *File) hcl.Diagnostics {
